@@ -1,0 +1,15 @@
+# Visual Studio crap
+.vs/
+*.user
+*.suo
+
+# Build outputs
+bin/
+obj/
+
+# NuGet packages (if using packages.config)
+packages/
+
+# Publish profiles
+*.pubxml
+*.pubxml.user

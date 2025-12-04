@@ -1,0 +1,31 @@
+﻿@model AzWinApp.Controllers.HomeViewModel
+
+@{
+    ViewBag.Title = "Home";
+}
+
+<h2>On-Prem Style App (Windows Auth + SQL)</h2>
+
+<p>
+    <strong>Current User:</strong> @Model.CurrentUser
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Department</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var emp in Model.Employees)
+        {
+            <tr>
+                <td>@emp.Id</td>
+                <td>@emp.Name</td>
+                <td>@emp.Department</td>
+            </tr>
+        }
+    </tbody>
+</table>
