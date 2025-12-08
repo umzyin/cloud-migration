@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../AzWinApp.Job/AzWinApp.Job.csproj" Id="39c615e2-9987-49d4-84e9-2c15d8bd0912" />
   <Project Path="AzWinApp-Web.csproj" Id="65fd48f0-0ea1-4445-a9f4-4ca42eda5968" />
 </Solution>
