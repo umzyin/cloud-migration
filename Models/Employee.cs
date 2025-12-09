@@ -1,4 +1,4 @@
-﻿namespace AzWinApp.Models
+﻿namespace AzWinApp_Web.Models
 {
     public class Employee
     {

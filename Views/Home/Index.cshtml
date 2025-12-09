@@ -1,31 +1,78 @@
-﻿@model AzWinApp.Controllers.HomeViewModel
+﻿@using AzWinApp_Web.Security
+@model IEnumerable<AzWinApp_Web.Models.Employee>
 
 @{
-    ViewBag.Title = "Home";
+    ViewBag.Title = "Employees";
+
+    string roleLabel = "ReadOnly";
+
+    if (User.IsInRole(RoleNames.Admin))
+    {
+        roleLabel = "Admin";
+    }
+    else if (User.IsInRole(RoleNames.ReadWrite))
+    {
+        roleLabel = "ReadWrite";
+    }
+    else if (User.IsInRole(RoleNames.ReadOnly))
+    {
+        roleLabel = "ReadOnly";
+    }
 }
 
-<h2>On-Prem Style App (Windows Auth + SQL)</h2>
+<div style="float:right; margin-top:10px;">
+    Logged in as: <strong>@User.Identity.Name</strong>
+    (<span>@roleLabel</span>)
+</div>
 
-<p>
-    <strong>Current User:</strong> @Model.CurrentUser
-</p>
+<h2>Employees</h2>
+<div style="clear:both;"></div>
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Department</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var emp in Model.Employees)
-        {
+@if (User.IsInRole(RoleNames.ReadWrite) || User.IsInRole(RoleNames.Admin))
+{
+    <p>
+        @Html.ActionLink("Create New Employee", "Create", "Home", null, new { @class = "btn btn-primary" })
+    </p>
+}
+
+@if (!Model.Any())
+{
+    <p>No employees found.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@emp.Id</td>
-                <td>@emp.Name</td>
-                <td>@emp.Department</td>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var emp in Model)
+            {
+                <tr>
+                    <td>@emp.Id</td>
+                    <td>@emp.Name</td>
+                    <td>@emp.Department</td>
+                    <td>
+                        @* Edit: ReadWrite + Admin *@
+                        @if (User.IsInRole(RoleNames.ReadWrite) || User.IsInRole(RoleNames.Admin))
+                        {
+                            @Html.ActionLink("Edit", "Edit", "Home", new { id = emp.Id }, null)
+                            @: |
+                        }
+
+                        @* Delete: Admin only *@
+                        @if (User.IsInRole(RoleNames.Admin))
+                        {
+                            @Html.ActionLink("Delete", "Delete", "Home", new { id = emp.Id }, null)
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

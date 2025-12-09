@@ -1,0 +1,66 @@
+@using AzWinApp_Web.Security
+@model IEnumerable<AzWinApp_Web.Models.TestItem>
+
+@{
+    ViewBag.Title = "Test Items";
+}
+
+<h2>Test Items</h2>
+
+<p>
+    @* Show Create button only for ReadWrite + Admin *@
+    @if (User.IsInRole(RoleNames.ReadWrite) || User.IsInRole(RoleNames.Admin))
+    {
+        <!-- For now this still uses query-string create -->
+        <span>
+            Example: /TestItems/Create?name=NewItem&description=Something
+        </span>
+    }
+</p>
+
+@if (!Model.Any())
+{
+    <p>No TestItems found in the database.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Created By</th>
+                <th>Created On (UTC)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>@item.CreatedBy</td>
+                    <td>@item.CreatedOn</td>
+                    <td>
+                        @* Everyone with any role can see details (here we just show Id) *@
+                        @* Edit: only ReadWrite + Admin *@
+                        @if (User.IsInRole(RoleNames.ReadWrite) || User.IsInRole(RoleNames.Admin))
+                        {
+                            @Html.ActionLink("Edit", "Edit", "TestItems", new { id = item.Id }, null)
+                            @: |
+                        }
+
+                        @* Delete: Admin only *@
+                        @if (User.IsInRole(RoleNames.Admin))
+                        {
+                            @Html.ActionLink("Delete", "Delete", "TestItems", new { id = item.Id }, null)
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

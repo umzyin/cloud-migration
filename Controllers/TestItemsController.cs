@@ -10,16 +10,23 @@ namespace AzWinApp_Web.Controllers
     {
         private readonly TestItemRepository _repo = new TestItemRepository();
         // READ – allowed to ALL 3 roles
+ //       [Authorize(Roles = RoleNames.ReadOnly + "," + RoleNames.ReadWrite + "," + RoleNames.Admin)]
+ //       public ActionResult Index()
+ //       {
+ //           var items = _repo.GetAll();
+ //           var count = items == null ? 0 : System.Linq.Enumerable.Count(items);
+ //            return Content(
+   //             $"Index: {count} TestItem row(s) found in DB. Visible to ReadOnly, ReadWrite, Admin",
+     //           "text/plain");
+       // }
+
         [Authorize(Roles = RoleNames.ReadOnly + "," + RoleNames.ReadWrite + "," + RoleNames.Admin)]
         public ActionResult Index()
         {
             var items = _repo.GetAll();
-            var count = items == null ? 0 : System.Linq.Enumerable.Count(items);
-
-            return Content(
-                $"Index: {count} TestItem row(s) found in DB. Visible to ReadOnly, ReadWrite, Admin",
-                "text/plain");
+            return View(items);
         }
+
 
         // CREATE – only ReadWrite + Admin
         [Authorize(Roles = RoleNames.ReadWrite + "," + RoleNames.Admin)]
